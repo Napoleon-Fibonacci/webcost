@@ -43,63 +43,6 @@ function dateParts(value) {
   };
 }
 
-const KONTAK_LABEL = {
-  instagram: "Instagram",
-  email: "Email",
-  tiktok: "TikTok",
-  youtube: "YouTube",
-  facebook: "Facebook",
-  whatsapp: "WhatsApp",
-  lain: "Kontak",
-};
-
-function kontakHref(jenis, nilai) {
-  if (jenis === "email") return `mailto:${nilai}`;
-  if (jenis === "whatsapp") {
-    return /^https?:\/\//.test(nilai) ? nilai : `https://wa.me/${String(nilai).replace(/\D/g, "")}`;
-  }
-  return /^https?:\/\//.test(nilai) ? nilai : `https://${nilai}`;
-}
-
-function watchSections() {
-  const links = new Map(
-    [...document.querySelectorAll(".site-nav a")].map((a) => [a.getAttribute("href").slice(1), a])
-  );
-  const sections = [...links.keys()]
-    .map((id) => document.getElementById(id))
-    .filter(Boolean);
-  const observer = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        for (const link of links.values()) link.classList.remove("active");
-        links.get(entry.target.id)?.classList.add("active");
-      }
-    },
-    { rootMargin: "-40% 0px -55% 0px" }
-  );
-  sections.forEach((s) => observer.observe(s));
-}
-
-function watchSketch() {
-  const sketch = document.querySelector(".sketch");
-  if (!sketch) return;
-  if (!("IntersectionObserver" in window)) {
-    sketch.classList.add("drawing");
-    return;
-  }
-  const io = new IntersectionObserver(
-    ([entry]) => {
-      if (entry.isIntersecting) {
-        sketch.classList.add("drawing");
-        io.disconnect();
-      }
-    },
-    { threshold: 0.35 }
-  );
-  io.observe(sketch);
-}
-
 async function init() {
   const settings = Object.fromEntries(
     (await rows("pengaturan"))?.map((r) => [r.key, r.value]) ?? []
@@ -113,32 +56,6 @@ async function init() {
   }
 
   const statusTanpaDb = client ? EMPTY : OFFLINE;
-
-  const kontak = await rows("kontak", "urutan");
-  const inline = document.querySelector('[data-fill="kontak_inline"]');
-  if (inline) {
-    inline.innerHTML = (kontak ?? [])
-      .map(
-        (k) =>
-          `<a href="${esc(kontakHref(k.jenis, k.nilai))}">${esc(KONTAK_LABEL[k.jenis] ?? k.jenis)}</a>`
-      )
-      .join("");
-  }
-  const kontakBox = document.getElementById("kontak-list");
-  if (!kontak) showMessage(kontakBox, statusTanpaDb);
-  else if (!kontak.length) showMessage(kontakBox, EMPTY);
-  else {
-    kontakBox.innerHTML = kontak
-      .map(
-        (k) =>
-          `<div class="kontak-row"><span class="kontak-jenis">${esc(
-            KONTAK_LABEL[k.jenis] ?? k.jenis
-          )}</span><a class="kontak-nilai" href="${esc(
-            kontakHref(k.jenis, k.nilai)
-          )}">${esc(k.nilai)}</a></div>`
-      )
-      .join("");
-  }
 
   const kegiatan = await rows("kegiatan", "urutan");
   const kegiatanBox = document.getElementById("kegiatan-list");
@@ -158,22 +75,6 @@ async function init() {
         return `<article class="entry">${tanggal}<div class="entry-body"><h3>${esc(
           k.judul
         )}</h3>${deskripsi}${foto}</div></article>`;
-      })
-      .join("");
-  }
-
-  const prestasi = await rows("prestasi", "tahun", false);
-  const prestasiBox = document.getElementById("prestasi-list");
-  if (!prestasi) showMessage(prestasiBox, statusTanpaDb);
-  else if (!prestasi.length) showMessage(prestasiBox, EMPTY);
-  else {
-    prestasiBox.innerHTML = prestasi
-      .map((p) => {
-        const foto = p.foto_url ? `<img src="${esc(p.foto_url)}" alt="${esc(p.nama)}">` : "";
-        const detail = [p.posisi, p.tingkat].filter(Boolean).map(esc).join(", ");
-        return `<article class="entry"><div class="entry-year">${esc(p.tahun ?? "")}</div><div class="entry-body"><h3>${esc(
-          p.nama
-        )}</h3>${detail ? `<p class="meta">${detail}</p>` : ""}${foto}</div></article>`;
       })
       .join("");
   }

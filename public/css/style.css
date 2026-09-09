@@ -375,7 +375,7 @@ html {
   margin-top: 0;
 }
 
-/* entri kegiatan & prestasi */
+/* entri kegiatan */
 
 .entries {
   margin-top: 1.5rem;
@@ -390,8 +390,7 @@ html {
   border-top: 1px solid var(--rule);
 }
 
-.entry-date,
-.entry-year {
+.entry-date {
   font-family: "Chakra Petch", system-ui, sans-serif;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -414,12 +413,6 @@ html {
   display: block;
   font-size: 0.8rem;
   color: var(--ink-soft);
-}
-
-.entry-year {
-  font-weight: 700;
-  font-size: 2rem;
-  line-height: 1;
 }
 
 .entry-body {
@@ -666,8 +659,7 @@ html {
     gap: 0.5rem;
   }
 
-  .entry-date,
-  .entry-year {
+  .entry-date {
     text-align: left;
     display: flex;
     align-items: baseline;

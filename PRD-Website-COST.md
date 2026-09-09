@@ -46,14 +46,13 @@ Website akan dikelola oleh **pengurus inti COST (siswa)** setelah rilis. Karena 
 3. **Bagian Kegiatan/Program Kerja**
    - Daftar kegiatan rutin/proker klub
    - Foto/dokumentasi kegiatan
-4. **Bagian Prestasi**
-   - Daftar penghargaan/kompetisi yang pernah diikuti/dimenangkan
-5. **Bagian Kontak**
-   - Media sosial (Instagram, dsb.), email, atau form kontak sederhana
-6. **Desain Responsif**
+4. **Bagian Kontak**
+- Media sosial (Instagram, dsb.), email, atau form kontak sederhana
+5. **Desain Responsif**
    - Bisa diakses baik dari HP maupun laptop/komputer
 
 ### 5.2 Fitur Tambahan (Nice to Have) — bisa menyusul setelah rilis awal
+- Bagian prestasi: daftar penghargaan/kompetisi (ditunda, belum ada data)
 - Galeri foto/video terpisah
 - Blog/berita update kegiatan
 - Form pendaftaran anggota baru online
@@ -101,7 +100,7 @@ Sebelum development, pengurus perlu menyiapkan:
 
 - **Frontend:** HTML/CSS/JavaScript vanilla, satu halaman (one-page) dengan navigasi anchor. Tanpa framework.
 - **Hosting:** Vercel (deploy statis dari repo Git).
-- **Database:** Supabase (PostgreSQL). Tabel untuk pengurus, kegiatan, prestasi, dan kontak.
+- **Database:** Supabase (PostgreSQL). Dua tabel: `pengaturan` (teks beranda) dan `kegiatan`. Sejarah, visi misi, susunan pengurus, dan kontak ditulis statis di kode; bagian prestasi ditunda.
 - **Kredensial:** `SUPABASE_URL` dan `SUPABASE_ANON_KEY` disimpan sebagai Environment Variables di Project Settings Vercel, bukan di dalam kode. Build script menuliskannya ke `js/config.js` saat deploy.
 - **Akses data:** Bagian publik membaca isi tabel lewat supabase-js (anon key) dengan Row Level Security mode baca-untuk-semua.
 - **Panel admin:** Tidak membuat sistem admin sendiri. Pengurus inti membuat akun Supabase (email/password), lalu mengedit konten lewat Supabase Dashboard (Table Editor). Tertulis 1–2 halaman panduan sebagai syarat butir 4.

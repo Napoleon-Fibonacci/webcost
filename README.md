@@ -33,10 +33,8 @@ Konten diedit lewat Supabase Dashboard, bukan lewat kode:
 
 1. Buka https://supabase.com/dashboard, login dengan akun pengurus, masuk ke proyek.
 2. Buka **Table Editor**, pilih tabel sesuai kebutuhan:
-   - `pengaturan` — tagline dan ringkasan beranda (sejarah, visi misi, dan pohon kepengurusan ditulis statis di `index.html`)
+   - `pengaturan` — tagline dan ringkasan beranda (sejarah, visi misi, kepengurusan, dan kontak ditulis statis di `index.html`)
    - `kegiatan` — program kerja dan dokumentasi
-   - `prestasi` — daftar penghargaan
-   - `kontak` — email dan media sosial
 3. Tambah baris lewat **Insert row**, ubah lewat klik sel. Untuk foto, unggah ke **Storage**, lalu salin URL publiknya ke kolom `foto_url`.
 4. Perubahan langsung tampil saat halaman dimuat ulang; tidak perlu deploy ulang.
 
