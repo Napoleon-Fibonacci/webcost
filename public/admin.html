@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Galeri — COST</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-name">COST</span>
+        <span class="brand-tag">Admin Galeri</span>
+      </a>
+      <nav class="site-nav" aria-label="Navigasi utama">
+        <a href="index.html">Kembali ke Situs</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container page-admin">
+    <div class="page-head">
+      <h1>Kelola Foto Galeri</h1>
+    </div>
+
+    <p id="no-db" class="muted" hidden>Basis data belum terhubung. Setel environment variable Supabase di Vercel, lalu deploy ulang.</p>
+
+    <section id="login">
+      <p>Masuk dengan password admin COST. Satu password yang sama dipakai semua pengurus, disimpan sebagai environment variable di Vercel.</p>
+      <form id="login-form">
+        <label>Password
+          <input id="password" type="password" autocomplete="current-password" required>
+        </label>
+        <button class="btn" type="submit">Masuk</button>
+      </form>
+      <p id="login-msg" class="error" role="alert"></p>
+    </section>
+
+    <section id="panel" hidden>
+      <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Area unggah foto">
+        Tarik foto ke sini, atau klik untuk memilih file.
+      </div>
+      <input type="file" id="file-input" accept="image/*" multiple hidden>
+      <p id="upload-status" class="muted" aria-live="polite"></p>
+      <p><button class="btn ghost" type="button" id="logout">Keluar</button></p>
+      <div class="admin-grid" id="admin-grid"></div>
+    </section>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

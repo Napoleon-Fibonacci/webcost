@@ -12,10 +12,11 @@ const EMPTY = "Belum ada data. Tambahkan lewat Supabase Table Editor.";
 const OFFLINE =
   "Basis data belum terhubung. Setel environment variable Supabase di Vercel, lalu deploy ulang.";
 
-async function rows(table, orderColumn, ascending = true) {
+async function rows(table, orderColumn, ascending = true, limit) {
   if (!client) return null;
   let query = client.from(table).select("*");
   if (orderColumn) query = query.order(orderColumn, { ascending });
+  if (limit) query = query.limit(limit);
   const { data, error } = await query;
   if (error) {
     console.error(`Gagal memuat tabel ${table}: ${error.message}`);
@@ -41,6 +42,30 @@ function dateParts(value) {
     m: date.toLocaleDateString("id-ID", { month: "short" }),
     y: date.getFullYear(),
   };
+}
+
+function initLightbox() {
+  const box = document.getElementById("galeri-grid");
+  const lb = document.getElementById("lightbox");
+  const img = document.getElementById("lightbox-img");
+  if (!box || !lb) return;
+  box.addEventListener("click", (e) => {
+    const foto = e.target.closest(".galeri-item img");
+    if (!foto) return;
+    img.src = foto.src;
+    lb.hidden = false;
+    document.getElementById("lightbox-close").focus();
+  });
+  const tutup = () => {
+    lb.hidden = true;
+    img.src = "";
+  };
+  lb.addEventListener("click", (e) => {
+    if (e.target === lb || e.target.id === "lightbox-close") tutup();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !lb.hidden) tutup();
+  });
 }
 
 async function init() {
@@ -79,7 +104,21 @@ async function init() {
       .join("");
   }
 
-  watchSections();
+  
+  const galeri = await rows("foto", "created_at", false, 12);
+  const galeriBox = document.getElementById("galeri-grid");
+  if (!galeri) showMessage(galeriBox, statusTanpaDb);
+  else if (!galeri.length) showMessage(galeriBox, "Belum ada foto. Unggah lewat halaman admin.");
+  else {
+    galeriBox.innerHTML = galeri
+      .map((f) => {
+        const url = client.storage.from("gallery").getPublicUrl(f.path).data.publicUrl;
+        return `<button class="galeri-item" type="button"><img src="${esc(url)}" alt="Foto kegiatan COST" loading="lazy"></button>`;
+      })
+      .join("");
+  }
+  initLightbox();
+watchSections();
   watchSketch();
 }
 

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>COST — Club of Science and Technology</title>
-  <meta name="description" content="Website resmi ekstrakurikuler COST (Club of Science and Technology): sejarah, kegiatan, dan kontak.">
+  <meta name="description" content="Website resmi ekstrakurikuler COST (Club of Science and Technology): sejarah, kegiatan, galeri foto, dan kontak.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet">
@@ -21,6 +21,7 @@
         <a href="#beranda" class="active">Beranda</a>
         <a href="#tentang">Tentang</a>
 <a href="#kegiatan">Kegiatan</a>
+<a href="#galeri">Galeri</a>
 <a href="#kontak">Kontak</a>
       </nav>
     </div>
@@ -145,11 +146,20 @@
 <section class="site-section" id="kegiatan">
         <div class="split">
           <h2 class="split-label">Kegiatan</h2>
-          <div class="entries" id="kegiatan-list">
-            <p class="muted">Daftar kegiatan dimuat dari basis data.</p>
-          </div>
-        </div>
-      </section>
+<div class="entries" id="kegiatan-list">
+<p class="muted">Daftar kegiatan dimuat dari basis data.</p>
+</div>
+</div>
+</section>
+
+<section class="site-section" id="galeri">
+<div class="split">
+<h2 class="split-label">Galeri</h2>
+<div class="galeri-grid" id="galeri-grid">
+<p class="muted">Foto kegiatan dimuat dari basis data.</p>
+</div>
+</div>
+</section>
 
 <section class="site-section" id="kontak">
 <div class="split">
@@ -165,9 +175,14 @@
 </div>
 </section>
     </div>
-  </main>
+</main>
 
-  <footer class="site-footer">
+<div class="lightbox" id="lightbox" hidden>
+<button class="lightbox-close" id="lightbox-close" type="button">Tutup</button>
+<img id="lightbox-img" src="" alt="">
+</div>
+
+<footer class="site-footer">
     <div class="container footer-inner">
       <p>&copy; 2026 COST</p>
       <p class="inline-links"><a href="https://instagram.com/akun.cost">Instagram</a><a href="mailto:cost@sekolah.sch.id">Email</a></p>
