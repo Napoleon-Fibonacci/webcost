@@ -1,0 +1,10 @@
+{
+  "name": "webcost",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-config.mjs",
+    "start": "node scripts/build-config.mjs && npx serve public"
+  }
+}
