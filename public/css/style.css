@@ -26,6 +26,7 @@ body {
   font-family: "Atkinson Hyperlegible", system-ui, sans-serif;
   font-size: 1rem;
   line-height: 1.7;
+  -webkit-tap-highlight-color: rgba(26, 86, 176, 0.15);
 }
 
 h1,
@@ -156,6 +157,47 @@ html {
   font-weight: 700;
 }
 
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 44px;
+  height: 40px;
+  padding: 0;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: currentColor;
+  transition: transform 0.18s ease, opacity 0.18s ease;
+}
+
+.nav-toggle[aria-expanded="true"] span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle[aria-expanded="true"] span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.nav-toggle:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+  background: var(--signal);
+}
+
 /* beranda */
 
 .hero {
@@ -169,7 +211,7 @@ html {
   left: 0;
   right: 0;
   bottom: 0;
-  height: 46%;
+  height: clamp(120px, 16vw, 170px);
   width: 100%;
 }
 
@@ -191,7 +233,7 @@ html {
 
 .hero-inner {
   position: relative;
-  padding-block: clamp(2.2rem, 6vw, 3.8rem) clamp(6rem, 14vw, 9rem);
+  padding-block: clamp(2.2rem, 6vw, 3.8rem) calc(clamp(120px, 16vw, 170px) + 1.75rem);
 }
 
 .hero h1 {
@@ -500,10 +542,17 @@ html {
 .node {
   background: var(--card);
   border: 1px solid var(--rule);
+  border-top: 3px solid var(--role, var(--rule));
   padding: 0.6rem 1.1rem;
   text-align: center;
   min-width: 128px;
 }
+
+.r-pembina { --role: #5c6f8a; }
+.r-ketua { --role: #1a56b0; }
+.r-wakil { --role: #0e9cc0; }
+.r-sekretaris { --role: #6d4fc4; }
+.r-bendahara { --role: #0f766e; }
 
 .node-role {
   display: block;
@@ -521,10 +570,6 @@ html {
   margin-top: 0.1rem;
 }
 
-.node.ketua {
-  border-bottom: 3px solid var(--signal);
-}
-
 .node-name + .node-name {
   margin-top: 0.05rem;
 }
@@ -540,6 +585,34 @@ html {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
   gap: 1.25rem;
+}
+
+.divisi-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.divisi-col:nth-child(even) {
+  flex-direction: column-reverse;
+  margin-top: 3.25rem;
+}
+
+.divisi-icon {
+  display: flex;
+  justify-content: center;
+  color: var(--blue);
+  opacity: 0.85;
+}
+
+.divisi-icon svg {
+  width: 72px;
+  height: 72px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .divisi {
@@ -577,27 +650,30 @@ html {
 /* kontak */
 
 .kontak-list {
-  margin-top: 1.5rem;
-  border-bottom: 1px solid var(--rule);
+margin-top: 1.5rem;
+display: flex;
+flex-direction: column;
+gap: 1.4rem;
 }
 
 .kontak-row {
-  display: grid;
-  grid-template-columns: 220px 1fr;
-  gap: 0.25rem 2rem;
-  align-items: baseline;
-  padding: 1.15rem 0;
-  border-top: 1px solid var(--rule);
+display: block;
 }
 
 .kontak-jenis {
-  font-family: "Chakra Petch", system-ui, sans-serif;
-
-  font-weight: 700;
+display: block;
+font-family: "Chakra Petch", system-ui, sans-serif;
+font-weight: 600;
+font-size: 0.8rem;
+letter-spacing: 0.04em;
+color: var(--ink-soft);
+margin-bottom: 0.15rem;
 }
 
 .kontak-nilai {
-  overflow-wrap: anywhere;
+font-size: 1.2rem;
+font-weight: 700;
+overflow-wrap: anywhere;
 }
 
 /* footer */
@@ -630,6 +706,57 @@ html {
 /* responsif */
 
 @media (max-width: 720px) {
+  .header-inner {
+    align-items: center;
+    padding-block: 0.55rem;
+  }
+
+  .brand-tag {
+    font-size: 0.72rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .has-menu .nav-toggle {
+    display: flex;
+  }
+
+  .has-menu .site-nav {
+    display: none;
+  }
+
+  .has-menu .site-nav.open {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+    padding: 0.25rem clamp(1.1rem, 4vw, 2rem) 0.6rem;
+  }
+
+  .has-menu .site-nav.open a {
+    width: 100%;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid rgba(14, 28, 46, 0.08);
+  }
+
+  .has-menu .site-nav.open a:last-child {
+    border-bottom: 0;
+  }
+
+  .hero-inner {
+    padding-top: 2rem;
+  }
+
+  .two-col {
+    gap: 1.75rem 0;
+  }
+
   .split {
     grid-template-columns: 1fr;
     gap: 0.75rem;
@@ -639,8 +766,28 @@ html {
     position: static;
   }
 
-  .kontak-row {
+  .section-head {
+    gap: 0.8rem;
+    padding-bottom: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .entry {
     grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding: 1.4rem 0;
+  }
+
+  .entry-date {
+    text-align: left;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .entry-date .m,
+  .entry-date .y {
+    display: inline;
   }
 
   .org-row {
@@ -655,21 +802,98 @@ html {
     display: none;
   }
 
-  .entry {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
+  .divisi-head {
+    margin: 2rem 0 0.9rem;
   }
 
-  .entry-date {
-    text-align: left;
-    display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
+  .divisi-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.9rem;
   }
 
-  .entry-date .m,
-  .entry-date .y {
-    display: inline;
+  .divisi-col:nth-child(even) {
+    margin-top: 1.75rem;
+  }
+
+  .divisi h4 {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .divisi ul {
+    padding: 0.3rem 0.75rem 0.6rem;
+  }
+
+  .divisi li {
+    font-size: 0.88rem;
+  }
+
+  .divisi-icon svg {
+    width: 52px;
+    height: 52px;
+  }
+
+  .footer-inner {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .inline-links a {
+    margin: 0 1.1rem 0 0;
+  }
+}
+
+@media (max-width: 440px) {
+  .hero h1 {
+    font-size: 3.1rem;
+    letter-spacing: 0.02em;
+  }
+
+  .hero-sub {
+    font-size: 1.02rem;
+  }
+
+  .orgchart {
+    width: 100%;
+  }
+
+  .org-row {
+    gap: 0;
+    padding-top: 0;
+  }
+
+  .org-row::after {
+    display: block;
+  }
+
+  .org-cell {
+    padding-top: 13px;
+  }
+
+  .org-cell::before {
+    display: block;
+    top: 0;
+    height: 13px;
+  }
+
+  .galeri-grid,
+  .admin-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (hover: none) {
+  .site-nav a:hover {
+    color: var(--ink);
+  }
+
+  .galeri-item:hover {
+    border-color: var(--rule);
+  }
+
+  .btn:hover {
+    transform: none;
+    box-shadow: 3px 3px 0 var(--blue);
   }
 }
 

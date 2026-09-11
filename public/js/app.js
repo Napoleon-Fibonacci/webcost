@@ -68,6 +68,29 @@ function initLightbox() {
   });
 }
 
+function initMenu() {
+  const btn = document.getElementById("nav-toggle");
+  const nav = document.getElementById("site-nav");
+  if (!btn || !nav) return;
+  const tutup = () => {
+    nav.classList.remove("open");
+    btn.setAttribute("aria-expanded", "false");
+  };
+  btn.addEventListener("click", () => {
+    const buka = nav.classList.toggle("open");
+    btn.setAttribute("aria-expanded", buka ? "true" : "false");
+  });
+  nav.addEventListener("click", (e) => {
+    if (e.target.closest("a")) tutup();
+  });
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".site-header")) tutup();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") tutup();
+  });
+}
+
 async function init() {
   const settings = Object.fromEntries(
     (await rows("pengaturan"))?.map((r) => [r.key, r.value]) ?? []
@@ -118,7 +141,8 @@ async function init() {
       .join("");
   }
   initLightbox();
-watchSections();
+initMenu();
+  watchSections();
   watchSketch();
 }
 
