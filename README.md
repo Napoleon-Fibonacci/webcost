@@ -33,24 +33,24 @@ supabase/schema.sql-> skema tabel, kebijakan RLS, dan data awal
 
 ## Cara pengurus memperbarui konten
 
-Teks dan kegiatan diedit lewat Supabase Dashboard; foto galeri lewat panel admin di situs.
+Teks beranda diedit lewat Supabase Dashboard; kegiatan dan foto lewat panel admin di situs.
 
-### Teks & kegiatan (Supabase Dashboard)
+### Teks beranda (Supabase Dashboard)
 
 1. Buka https://supabase.com/dashboard, login dengan akun pengurus, masuk ke proyek.
 2. Buka **Table Editor**, pilih tabel sesuai kebutuhan:
    - `pengaturan` — tagline dan ringkasan beranda (sejarah, visi misi, kepengurusan, dan kontak ditulis statis di `index.html`)
-   - `kegiatan` — program kerja dan dokumentasi
-3. Tambah baris lewat **Insert row**, ubah lewat klik sel. Untuk foto di kartu kegiatan, unggah ke **Storage**, lalu salin URL publiknya ke kolom `foto_url`.
+   - `kegiatan` — masih bisa diedit langsung di sini, tapi lebih nyaman lewat tab Kegiatan di panel admin
+3. Tambah baris lewat **Insert row**, ubah lewat klik sel.
 4. Perubahan langsung tampil saat halaman dimuat ulang; tidak perlu deploy ulang.
 
-### Foto galeri (panel admin di situs)
+### Foto galeri & kegiatan (panel admin di situs)
 
 1. Buka `https://domain-anda.vercel.app/admin` (sengaja tidak ditautkan dari halaman publik; bookmark alamatnya).
 2. Masukkan `ADMIN_PASSWORD` yang dibuat di Vercel. Satu password, berlaku untuk semua pengurus; ganti dengan mengubah env lalu deploy ulang.
-3. Tarik foto ke kotak putus-putus, atau klik kotak lalu pilih file. Foto tersimpan di bucket `gallery` Supabase Storage.
-4. Hapus foto lewat tombol merah **Hapus** pada foto tersebut.
-5. Galeri di halaman utama ikut terisi sendiri, tanpa deploy ulang.
+3. Tab **Foto Galeri**: tarik foto ke kotak putus-putus atau klik untuk memilih file. Tombol merah **Hapus** menghapus foto.
+4. Tab **Kegiatan**: isi judul, tanggal, deskripsi, lalu pilih foto dari galeri yang sudah diunggah (atau Tanpa foto). **Simpan Kegiatan** menambah entri baru; setiap baris punya **Ubah** (memuat ulang data ke formulir) dan **Hapus**.
+5. Semua perubahan langsung tampil di halaman utama, tanpa deploy ulang.
 
 ## Menjalankan di komputer lokal
 

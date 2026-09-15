@@ -5,11 +5,6 @@ const esc = (value) =>
 
 const $ = (id) => document.getElementById(id);
 
-if (!window.SUPABASE_URL) {
-  $("login").hidden = true;
-  $("no-db").hidden = false;
-}
-
 function showApp(on) {
   $("login").hidden = on;
   $("panel").hidden = !on;
@@ -34,22 +29,175 @@ async function api(url, options = {}) {
 const fotoUrl = (path) =>
   `${window.SUPABASE_URL}/storage/v1/object/public/gallery/${encodeURIComponent(path)}`;
 
-async function refreshGrid() {
+let galleryPaths = [];
+let selectedPath = "";
+let kegiatanRows = [];
+let editingId = "";
+
+document.querySelectorAll(".admin-tab").forEach((tab) => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".admin-tab").forEach((t) => {
+      t.setAttribute("aria-selected", String(t === tab));
+    });
+    $("isi-galeri").hidden = tab.id !== "tab-galeri";
+    $("isi-kegiatan").hidden = tab.id !== "tab-kegiatan";
+  });
+});
+
+function renderAdminGrid() {
   const grid = $("admin-grid");
-  try {
-    const rowsData = await api("/api/list");
-    if (!rowsData.length) {
-      grid.innerHTML = '<p class="muted">Belum ada foto. Tarik file ke kotak di atas.</p>';
-      return;
-    }
-    grid.innerHTML = rowsData
+  if (!galleryPaths.length) {
+    grid.innerHTML = '<p class="muted">Belum ada foto. Tarik file ke kotak di atas.</p>';
+    return;
+  }
+  grid.innerHTML = galleryPaths
+    .map(
+      (p) =>
+        `<div class="admin-item"><img src="${esc(fotoUrl(p))}" alt="" loading="lazy"><button class="btn-danger" type="button" data-path="${esc(p)}">Hapus</button></div>`
+    )
+    .join("");
+}
+
+function renderPicker() {
+  const box = $("k-picker");
+  if (!galleryPaths.length) {
+    box.innerHTML = '<p class="muted">Belum ada foto di galeri. Unggah lewat tab Foto Galeri dulu.</p>';
+    return;
+  }
+  box.innerHTML =
+    `<button type="button" class="p-kosong" data-path="" aria-pressed="${selectedPath === ""}">Tanpa foto</button>` +
+    galleryPaths
       .map(
-        (f) =>
-          `<div class="admin-item"><img src="${esc(fotoUrl(f.path))}" alt="" loading="lazy"><button class="btn-danger" type="button" data-path="${esc(f.path)}">Hapus</button></div>`
+        (p) =>
+          `<button type="button" data-path="${esc(p)}" aria-pressed="${selectedPath === p}"><img src="${esc(fotoUrl(p))}" alt=""></button>`
       )
       .join("");
+}
+
+async function muatGallery() {
+  galleryPaths = (await api("/api/list")).map((f) => f.path);
+  renderAdminGrid();
+  renderPicker();
+}
+
+function tanggalPanjang(value) {
+  if (!value) return "";
+  const d = new Date(value);
+  return Number.isNaN(d.getTime())
+    ? ""
+    : d.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
+}
+
+function renderKegiatan() {
+  const box = $("k-list");
+  if (!kegiatanRows.length) {
+    box.innerHTML = '<p class="muted">Belum ada kegiatan. Isi formulir di atas untuk menambah.</p>';
+    return;
+  }
+  box.innerHTML = kegiatanRows
+    .map((k) => {
+      const tgl = tanggalPanjang(k.tanggal);
+      const thumb = k.foto_url ? `<img class="k-thumb" src="${esc(k.foto_url)}" alt="" loading="lazy">` : "";
+      return `<div class="k-row"><div class="k-info"><h4>${esc(k.judul)}</h4>${
+        tgl ? `<p class="meta">${esc(tgl)}</p>` : ""
+      }${thumb}</div><div class="k-actions"><button class="btn-mini" type="button" data-edit="${esc(k.id)}">Ubah</button><button class="btn-mini danger" type="button" data-del="${esc(k.id)}" data-judul="${esc(k.judul)}">Hapus</button></div></div>`;
+    })
+    .join("");
+}
+
+async function muatKegiatan() {
+  kegiatanRows = await api("/api/kegiatan");
+  renderKegiatan();
+}
+
+function mulaiEdit(id) {
+  const k = kegiatanRows.find((r) => String(r.id) === String(id));
+  if (!k) return;
+  editingId = String(k.id);
+  $("k-id").value = k.id;
+  $("k-judul").value = k.judul ?? "";
+  $("k-tanggal").value = k.tanggal ?? "";
+  $("k-deskripsi").value = k.deskripsi ?? "";
+  selectedPath = "";
+  if (k.foto_url) {
+    const cocok = galleryPaths.find((p) => fotoUrl(p) === k.foto_url);
+    if (cocok) selectedPath = cocok;
+  }
+  renderPicker();
+  $("k-simpan").textContent = "Perbarui Kegiatan";
+  $("k-batal").hidden = false;
+  $("k-form").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function batalEdit() {
+  editingId = "";
+  $("k-form").reset();
+  $("k-id").value = "";
+  selectedPath = "";
+  renderPicker();
+  $("k-simpan").textContent = "Simpan Kegiatan";
+  $("k-batal").hidden = true;
+}
+
+$("k-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const status = $("k-status");
+  status.textContent = "Menyimpan…";
+  try {
+    await api("/api/kegiatan", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: editingId || undefined,
+        judul: $("k-judul").value,
+        tanggal: $("k-tanggal").value || null,
+        deskripsi: $("k-deskripsi").value,
+        foto_path: selectedPath || null,
+      }),
+    });
+    status.textContent = editingId ? "Kegiatan diperbarui." : "Kegiatan tersimpan.";
+    batalEdit();
+    await muatKegiatan();
+  } catch (err) {
+    status.textContent = err.message;
+  }
+});
+
+$("k-batal").addEventListener("click", batalEdit);
+
+$("k-list").addEventListener("click", async (e) => {
+  const ubah = e.target.closest("button[data-edit]");
+  if (ubah) {
+    mulaiEdit(ubah.dataset.edit);
+    return;
+  }
+  const hapusBtn = e.target.closest("button[data-del]");
+  if (hapusBtn && window.confirm(`Hapus kegiatan "${hapusBtn.dataset.judul}"?`)) {
+    try {
+      await api("/api/kegiatan", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: Number(hapusBtn.dataset.del) }),
+      });
+      await muatKegiatan();
+    } catch (err) {
+      $("k-status").textContent = err.message;
+    }
+  }
+});
+
+$("k-picker").addEventListener("click", (e) => {
+  const btn = e.target.closest("button[data-path]");
+  if (!btn) return;
+  selectedPath = btn.dataset.path;
+  renderPicker();
+});
+
+async function refreshGrid() {
+  try {
+    await muatGallery();
   } catch (e) {
-    grid.innerHTML = `<p class="error">${esc(e.message)}</p>`;
+    $("admin-grid").innerHTML = `<p class="error">${esc(e.message)}</p>`;
   }
 }
 
@@ -98,7 +246,9 @@ $("login-form").addEventListener("submit", async (e) => {
       body: JSON.stringify({ password: $("password").value }),
     });
     showApp(true);
-    await refreshGrid();
+    await Promise.all([refreshGrid(), muatKegiatan().catch((err) => {
+      $("k-list").innerHTML = `<p class="error">${esc(err.message)}</p>`;
+    })]);
   } catch (e) {
     $("login-msg").textContent = e.message;
   }
@@ -138,9 +288,9 @@ $("admin-grid").addEventListener("click", (e) => {
 });
 
 api("/api/list")
-  .then(() => {
+  .then(async () => {
     showApp(true);
-    return refreshGrid();
+    await Promise.all([refreshGrid(), muatKegiatan().catch(() => {})]);
   })
   .catch((e) => {
     showApp(false);

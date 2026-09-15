@@ -1236,3 +1236,171 @@ overflow-wrap: anywhere;
     animation: none;
   }
 }
+
+/* panel: tab, formulir kegiatan, pemilih foto */
+
+.admin-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.75rem;
+}
+
+.admin-tab {
+  padding: 0.5rem 1.1rem;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  font-family: "Chakra Petch", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.admin-tab[aria-selected="true"] {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+
+.k-form {
+  margin-top: 1.75rem;
+  border: 1px solid var(--rule);
+  background: var(--card);
+  padding: 1.25rem clamp(1rem, 3vw, 1.75rem) 1.5rem;
+}
+
+.page-admin textarea {
+  display: block;
+  width: 100%;
+  max-width: 560px;
+  margin-top: 0.35rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  font: inherit;
+  resize: vertical;
+}
+
+.page-admin input[type="date"] {
+  display: block;
+  margin-top: 0.35rem;
+  padding: 0.5rem 0.7rem;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  font: inherit;
+}
+
+.label-teks {
+  display: block;
+  margin-top: 1.1rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.picker {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+  gap: 0.5rem;
+  max-height: 190px;
+  overflow-y: auto;
+  margin-top: 0.5rem;
+  padding-right: 0.25rem;
+}
+
+.picker button {
+  padding: 0;
+  border: 2px solid transparent;
+  background: none;
+  line-height: 0;
+  cursor: pointer;
+}
+
+.picker button[aria-pressed="true"] {
+  border-color: var(--signal);
+}
+
+.picker img {
+  width: 100%;
+  height: 64px;
+  object-fit: cover;
+  border: 1px solid var(--rule);
+}
+
+.picker .p-kosong {
+  line-height: 1.3;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  border-style: dashed;
+  border-color: var(--rule);
+  padding: 0.3rem;
+}
+
+.k-form-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.k-list-head {
+  margin: 2.5rem 0 1rem;
+}
+
+.k-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 1rem;
+  border: 1px solid var(--rule);
+  background: var(--card);
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.k-row h4 {
+  margin: 0;
+  font-family: "Chakra Petch", system-ui, sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+
+.k-thumb {
+  display: block;
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border: 1px solid var(--rule);
+  margin-top: 0.4rem;
+}
+
+.k-actions {
+  display: flex;
+  gap: 0.4rem;
+  flex: none;
+}
+
+.btn-mini {
+  padding: 0.35rem 0.7rem;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  font-family: "Chakra Petch", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 0.78rem;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.btn-mini:hover {
+  border-color: var(--blue);
+}
+
+.btn-mini.danger {
+  background: var(--danger);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.admin-out {
+  margin-top: 2.5rem;
+}

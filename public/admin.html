@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#f0f3f8">
-  <title>Admin Galeri — COST</title>
+  <title>Admin — COST</title>
+  <meta name="theme-color" content="#f0f3f8">
   <meta name="robots" content="noindex">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,7 +16,7 @@
     <div class="container header-inner">
       <a class="brand" href="index.html">
         <span class="brand-name">COST</span>
-        <span class="brand-tag">Admin Galeri</span>
+        <span class="brand-tag">Panel Pengurus</span>
       </a>
       <nav class="site-nav" aria-label="Navigasi utama">
         <a href="index.html">Kembali ke Situs</a>
@@ -26,7 +26,7 @@
 
   <main class="container page-admin">
     <div class="page-head">
-      <h1>Kelola Foto Galeri</h1>
+      <h1>Panel Pengurus</h1>
     </div>
 
     <p id="no-db" class="muted" hidden>Basis data belum terhubung. Setel environment variable Supabase di Vercel, lalu deploy ulang.</p>
@@ -43,13 +43,45 @@
     </section>
 
     <section id="panel" hidden>
-      <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Area unggah foto">
-        Tarik foto ke sini, atau klik untuk memilih file.
+      <div class="admin-tabs" role="tablist" aria-label="Bagian panel">
+        <button class="admin-tab" id="tab-galeri" type="button" role="tab" aria-selected="true" aria-controls="isi-galeri">Foto Galeri</button>
+        <button class="admin-tab" id="tab-kegiatan" type="button" role="tab" aria-selected="false" aria-controls="isi-kegiatan">Kegiatan</button>
       </div>
-      <input type="file" id="file-input" accept="image/*" multiple hidden>
-      <p id="upload-status" class="muted" aria-live="polite"></p>
-      <p><button class="btn ghost" type="button" id="logout">Keluar</button></p>
-      <div class="admin-grid" id="admin-grid"></div>
+
+      <div id="isi-galeri" role="tabpanel" aria-labelledby="tab-galeri">
+        <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Area unggah foto">
+          Tarik foto ke sini, atau klik untuk memilih file.
+        </div>
+        <input type="file" id="file-input" accept="image/*" multiple hidden>
+        <p id="upload-status" class="muted" aria-live="polite"></p>
+        <div class="admin-grid" id="admin-grid"></div>
+      </div>
+
+      <div id="isi-kegiatan" role="tabpanel" aria-labelledby="tab-kegiatan" hidden>
+        <form id="k-form" class="k-form">
+          <input type="hidden" id="k-id">
+          <label>Judul kegiatan
+            <input id="k-judul" type="text" maxlength="120" required>
+          </label>
+          <label>Tanggal
+            <input id="k-tanggal" type="date">
+          </label>
+          <label>Deskripsi
+            <textarea id="k-deskripsi" rows="3" maxlength="600"></textarea>
+          </label>
+          <span class="label-teks">Foto dokumentasi (dari galeri)</span>
+          <div class="picker" id="k-picker"></div>
+          <div class="k-form-actions">
+            <button class="btn" type="submit" id="k-simpan">Simpan Kegiatan</button>
+            <button class="btn ghost" type="button" id="k-batal" hidden>Batalkan</button>
+          </div>
+          <p id="k-status" class="muted" aria-live="polite"></p>
+        </form>
+        <h3 class="k-list-head">Daftar kegiatan</h3>
+        <div id="k-list" class="k-list"></div>
+      </div>
+
+      <p class="admin-out"><button class="btn ghost" type="button" id="logout">Keluar</button></p>
     </section>
   </main>
 
