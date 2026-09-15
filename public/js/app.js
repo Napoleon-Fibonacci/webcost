@@ -91,6 +91,26 @@ function initMenu() {
   });
 }
 
+function initReveal() {
+  const els = document.querySelectorAll("[data-reveal]");
+  if (!els.length) return;
+  if (!("IntersectionObserver" in window)) {
+    els.forEach((el) => el.classList.add("revealed"));
+    return;
+  }
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.classList.add("revealed");
+        io.unobserve(entry.target);
+      }
+    },
+    { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
+  );
+  els.forEach((el) => io.observe(el));
+}
+
 async function init() {
   const settings = Object.fromEntries(
     (await rows("pengaturan"))?.map((r) => [r.key, r.value]) ?? []
@@ -141,7 +161,8 @@ async function init() {
       .join("");
   }
   initLightbox();
-initMenu();
+initReveal();
+  initMenu();
   watchSections();
   watchSketch();
 }
