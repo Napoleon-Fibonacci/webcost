@@ -8,6 +8,8 @@ const client =
     ? window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY)
     : null;
 
+let galeriData = [];
+
 const EMPTY = "Belum ada data. Tambahkan lewat Supabase Table Editor.";
 const OFFLINE =
   "Basis data belum terhubung. Setel environment variable Supabase di Vercel, lalu deploy ulang.";
@@ -44,71 +46,56 @@ function dateParts(value) {
   };
 }
 
+function tanggalPendek(value) {
+  if (!value) return "";
+  const d = new Date(value);
+  return Number.isNaN(d.getTime())
+    ? ""
+    : d.toLocaleDateString("id-ID", { day: "numeric", month: "short" });
+}
+
 function initLightbox() {
   const box = document.getElementById("galeri-grid");
   const lb = document.getElementById("lightbox");
   const img = document.getElementById("lightbox-img");
-  if (!box || !lb) return;
-  box.addEventListener("click", (e) => {
-    const foto = e.target.closest(".galeri-item img");
-    if (!foto) return;
-    img.src = foto.src;
-    lb.hidden = false;
-    document.getElementById("lightbox-close").focus();
-  });
+  const caption = document.getElementById("lightbox-caption");
+  if (!box || !lb || !img) return;
+  let idx = 0;
+  const tampil = (i) => {
+    if (!galeriData.length) return;
+    idx = (i + galeriData.length) % galeriData.length;
+    img.src = galeriData[idx].url;
+    img.alt = `Foto kegiatan COST ${idx + 1}`;
+    if (caption) {
+      const tgl = tanggalPendek(galeriData[idx].tanggal);
+      caption.textContent = tgl
+        ? `Foto ${idx + 1} dari ${galeriData.length}, ${tgl}`
+        : `Foto ${idx + 1} dari ${galeriData.length}`;
+    }
+  };
   const tutup = () => {
     lb.hidden = true;
     img.src = "";
   };
+  box.addEventListener("click", (e) => {
+    const item = e.target.closest(".galeri-item");
+    if (!item) return;
+    tampil(Number(item.dataset.idx) || 0);
+    lb.hidden = false;
+    document.getElementById("lightbox-close").focus();
+  });
+  document.getElementById("lightbox-prev").addEventListener("click", () => tampil(idx - 1));
+  document.getElementById("lightbox-next").addEventListener("click", () => tampil(idx + 1));
   lb.addEventListener("click", (e) => {
-    if (e.target === lb || e.target.id === "lightbox-close") tutup();
+    if (e.target === lb) tutup();
   });
+  document.getElementById("lightbox-close").addEventListener("click", tutup);
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && !lb.hidden) tutup();
-  });
-}
-
-function initMenu() {
-  const btn = document.getElementById("nav-toggle");
-  const nav = document.getElementById("site-nav");
-  if (!btn || !nav) return;
-  const tutup = () => {
-    nav.classList.remove("open");
-    btn.setAttribute("aria-expanded", "false");
-  };
-  btn.addEventListener("click", () => {
-    const buka = nav.classList.toggle("open");
-    btn.setAttribute("aria-expanded", buka ? "true" : "false");
-  });
-  nav.addEventListener("click", (e) => {
-    if (e.target.closest("a")) tutup();
-  });
-  document.addEventListener("click", (e) => {
-    if (!e.target.closest(".site-header")) tutup();
-  });
-  document.addEventListener("keydown", (e) => {
+    if (lb.hidden) return;
     if (e.key === "Escape") tutup();
+    if (e.key === "ArrowLeft") tampil(idx - 1);
+    if (e.key === "ArrowRight") tampil(idx + 1);
   });
-}
-
-function initReveal() {
-  const els = document.querySelectorAll("[data-reveal]");
-  if (!els.length) return;
-  if (!("IntersectionObserver" in window)) {
-    els.forEach((el) => el.classList.add("revealed"));
-    return;
-  }
-  const io = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        entry.target.classList.add("revealed");
-        io.unobserve(entry.target);
-      }
-    },
-    { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
-  );
-  els.forEach((el) => io.observe(el));
 }
 
 async function init() {
@@ -149,16 +136,23 @@ async function init() {
 
   
   const galeri = await rows("foto", "created_at", false, 12);
+  galeriData = (galeri ?? []).map((f) => ({
+    url: client.storage.from("gallery").getPublicUrl(f.path).data.publicUrl,
+    tanggal: f.created_at,
+  }));
   const galeriBox = document.getElementById("galeri-grid");
   if (!galeri) showMessage(galeriBox, statusTanpaDb);
-  else if (!galeri.length) showMessage(galeriBox, "Belum ada foto. Unggah lewat halaman admin.");
+  else if (!galeri.length) showMessage(galeriBox, "Belum ada foto. Pengurus menambahnya lewat halaman /admin.");
   else {
-    galeriBox.innerHTML = galeri
-      .map((f) => {
-        const url = client.storage.from("gallery").getPublicUrl(f.path).data.publicUrl;
-        return `<button class="galeri-item" type="button"><img src="${esc(url)}" alt="Foto kegiatan COST" loading="lazy"></button>`;
-      })
-      .join("");
+  galeriBox.innerHTML = galeriData
+    .map(
+      (g, i) =>
+        `<button class="galeri-item" type="button" data-idx="${i}" aria-label="Buka foto ${i + 1}">` +
+        `<span class="g-frame"><img src="${esc(g.url)}" alt="" loading="lazy"></span>` +
+        `<span class="g-strip"><span class="g-num">${String(i + 1).padStart(2, "0")}</span>` +
+        `<span class="g-tgl">${esc(tanggalPendek(g.tanggal))}</span></span></button>`
+    )
+    .join("");
   }
   initLightbox();
 initReveal();
