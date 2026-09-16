@@ -98,6 +98,84 @@ function initLightbox() {
   });
 }
 
+function initReveal() {
+  const els = document.querySelectorAll("[data-reveal]");
+  if (!els.length) return;
+  if (!("IntersectionObserver" in window)) {
+    els.forEach((el) => el.classList.add("revealed"));
+    return;
+  }
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("revealed");
+          io.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
+  );
+  els.forEach((el) => io.observe(el));
+}
+
+function initMenu() {
+  const toggle = document.getElementById("nav-toggle");
+  const nav = document.getElementById("site-nav");
+  if (!toggle || !nav) return;
+  toggle.addEventListener("click", () => {
+    const open = toggle.getAttribute("aria-expanded") === "true";
+    toggle.setAttribute("aria-expanded", String(!open));
+    nav.classList.toggle("open", !open);
+  });
+  nav.querySelectorAll("a").forEach((a) =>
+    a.addEventListener("click", () => {
+      toggle.setAttribute("aria-expanded", "false");
+      nav.classList.remove("open");
+    })
+  );
+}
+
+function watchSections() {
+  const links = document.querySelectorAll(".site-nav a[href^='#']");
+  const sections = Array.from(links)
+    .map((a) => document.querySelector(a.getAttribute("href")))
+    .filter(Boolean);
+  if (!sections.length || !("IntersectionObserver" in window)) return;
+  const setActive = (id) => {
+    links.forEach((a) => a.classList.toggle("active", a.getAttribute("href") === `#${id}`));
+  };
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    },
+    { rootMargin: "-45% 0px -50% 0px", threshold: 0 }
+  );
+  sections.forEach((sec) => io.observe(sec));
+}
+
+function watchSketch() {
+  const sketch = document.querySelector(".sketch");
+  if (!sketch || !("IntersectionObserver" in window)) {
+    if (sketch) sketch.classList.add("drawing");
+    return;
+  }
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("drawing");
+          io.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.3 }
+  );
+  io.observe(sketch);
+}
+
 async function init() {
   const settings = Object.fromEntries(
     (await rows("pengaturan"))?.map((r) => [r.key, r.value]) ?? []
@@ -155,10 +233,24 @@ async function init() {
     .join("");
   }
   initLightbox();
-initReveal();
-  initMenu();
-  watchSections();
-  watchSketch();
 }
 
-init();
+function initReveal() {
+  const els = document.querySelectorAll("[data-reveal]");
+  if (!els.length) return;
+  if (!("IntersectionObserver" in window)) {
+    els.forEach((el) => el.classList.add("revealed"));
+    return;
+  }
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.classList.add("revealed");
+        io.unobserve(entry.target);
+      }
+    },
+    { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
+  );
+  els.forEach((el) => io.observe(el));
+}
