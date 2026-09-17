@@ -6,3 +6,12 @@ node_modules/
 skills-lock.json
 public/js/config.js
 AGENTS.md
+HEARTBEAT.md
+IDENTITY.md
+SOUL.md
+TOOLS.md
+USER.md
+skills
+config
+.opencode
+.cluster

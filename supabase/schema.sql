@@ -26,7 +26,7 @@ create policy "publik baca kegiatan" on public.kegiatan for select to anon using
 -- Data awal (placeholder).
 insert into public.pengaturan (key, value) values
   ('tagline', 'Club of Science and Technology'),
-  ('ringkasan_home', 'COST adalah ekstrakurikuler sekolah di bidang sains dan teknologi. Ganti teks ini lewat Supabase Table Editor.');
+  ('ringkasan_home', 'COST adalah ekstrakurikuler sekolah di bidang sains dan teknologi.');
 
 insert into public.kegiatan (judul, deskripsi, tanggal, urutan) values
   ('Pertemuan Rutin', 'Contoh kegiatan rutin mingguan. Ganti dengan data asli.', current_date, 1);

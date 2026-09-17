@@ -121,6 +121,16 @@ function initReveal() {
   els.forEach((el) => io.observe(el));
 }
 
+function initHeroTitle() {
+  const h1 = document.querySelector(".hero h1");
+  if (!h1) return;
+  const text = h1.textContent.trim();
+  h1.setAttribute("aria-label", text);
+  h1.innerHTML = [...text]
+    .map((ch) => `<span class="type-char" aria-hidden="true">${ch}</span>`)
+    .join("") + `<span class="caret" aria-hidden="true"></span>`;
+}
+
 function initMenu() {
   const toggle = document.getElementById("nav-toggle");
   const nav = document.getElementById("site-nav");
@@ -238,6 +248,7 @@ async function init() {
 }
 
 initReveal();
+initHeroTitle();
 initMenu();
 watchSections();
 watchSketch();
