@@ -201,16 +201,60 @@ async function refreshGrid() {
   }
 }
 
+const MAX_EDGE = 1920;
+const JPEG_QUALITY = 0.87;
+const KOMPRESS_ABOVE = 600 * 1024;
+
+// Foto besar di-resize + dikompres di browser sebelum dikirim,
+// supaya galeri tetap tajam (maks sisi 1920px) tapi ringan diunduh.
+function kompresFile(file) {
+  if (file.type === "image/gif") return Promise.resolve(file);
+  if (file.size <= KOMPRESS_ABOVE) return Promise.resolve(file);
+  return createImageBitmap(file)
+    .then((bmp) => {
+      const skala = Math.min(1, MAX_EDGE / Math.max(bmp.width, bmp.height));
+      const w = Math.round(bmp.width * skala);
+      const h = Math.round(bmp.height * skala);
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d");
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(bmp, 0, 0, w, h);
+      bmp.close?.();
+      return new Promise((resolve) => {
+        canvas.toBlob(
+          (blob) => {
+            if (!blob || blob.size >= file.size) return resolve(file);
+            const ext = file.type === "image/png" ? ".png" : ".jpg";
+            const nama = file.name.replace(/\.[^.]+$/, "") + ext;
+            resolve(new File([blob], nama, { type: blob.type }));
+          },
+          "image/jpeg",
+          JPEG_QUALITY
+        );
+      });
+    })
+    .catch(() => file);
+}
+
 async function upload(files) {
   const list = [...files].filter((f) => f.type.startsWith("image/"));
   if (!list.length) return;
   const status = $("upload-status");
   for (let i = 0; i < list.length; i++) {
+    status.textContent = `Memproses ${i + 1} dari ${list.length}…`;
+    let file = list[i];
+    try {
+      file = await kompresFile(file);
+    } catch {
+      /* pakai berkas asli bila kompresi gagal */
+    }
     status.textContent = `Mengunggah ${i + 1} dari ${list.length}…`;
     try {
       await api(
-        `/api/upload?name=${encodeURIComponent(list[i].name)}&mime=${encodeURIComponent(list[i].type)}`,
-        { method: "POST", body: list[i] }
+        `/api/upload?name=${encodeURIComponent(file.name)}&mime=${encodeURIComponent(file.type)}`,
+        { method: "POST", body: file }
       );
     } catch (e) {
       status.textContent = `Gagal unggah ${list[i].name}: ${e.message}`;

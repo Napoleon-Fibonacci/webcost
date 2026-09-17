@@ -5,3 +5,4 @@ node_modules/
 .agents/skills
 skills-lock.json
 public/js/config.js
+AGENTS.md

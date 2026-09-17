@@ -500,6 +500,29 @@ html {
   font-size: 0.9rem;
 }
 
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 200;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--blue);
+  color: var(--ink);
+  font-family: "Chakra Petch", system-ui, sans-serif;
+  font-weight: 600;
+  padding: 0.6rem 1.1rem;
+}
+
+.skip-link:focus {
+  left: 0.75rem;
+  top: 0.75rem;
+}
+
+body.lightbox-open {
+  overflow: hidden;
+}
+
 /* pohon kepengurusan */
 
 .orgchart {
@@ -557,6 +580,16 @@ html {
   left: 50%;
   height: 13px;
   border-left: 1px solid var(--conn);
+}
+
+.org-row.two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 560px;
+}
+
+.org-row.two::before {
+  left: calc((100% - 1.5rem) / 4);
+  right: calc((100% - 1.5rem) / 4);
 }
 
 .node {
@@ -822,12 +855,34 @@ overflow-wrap: anywhere;
     display: none;
   }
 
+  .org-row.two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 1.5rem;
+    padding-top: 26px;
+    max-width: 100%;
+  }
+
+  .org-row.two::after,
+  .org-row.two::before,
+  .org-row.two .org-cell::before {
+    display: block;
+  }
+
+  .org-row.two .org-cell {
+    min-width: 0;
+  }
+
+  .org-row.two .node {
+    min-width: 0;
+    width: 100%;
+  }
+
   .divisi-head {
     margin: 2rem 0 0.9rem;
   }
 
   .divisi-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.9rem;
   }
 
@@ -896,8 +951,22 @@ overflow-wrap: anywhere;
     height: 13px;
   }
 
+  .org-row.two {
+    gap: 0 1.5rem;
+    padding-top: 26px;
+  }
+
+  .org-row.two .org-cell {
+    padding-top: 0;
+  }
+
+  .org-row.two .org-cell::before {
+    top: -13px;
+    height: 13px;
+  }
+
   .admin-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -1212,7 +1281,7 @@ overflow-wrap: anywhere;
 
 @media (max-width: 720px) {
   .galeri-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-auto-rows: clamp(110px, 30vw, 160px);
   }
 

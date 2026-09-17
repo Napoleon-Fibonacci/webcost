@@ -76,12 +76,14 @@ function initLightbox() {
   const tutup = () => {
     lb.hidden = true;
     img.src = "";
+    document.body.classList.remove("lightbox-open");
   };
   box.addEventListener("click", (e) => {
     const item = e.target.closest(".galeri-item");
     if (!item) return;
     tampil(Number(item.dataset.idx) || 0);
     lb.hidden = false;
+    document.body.classList.add("lightbox-open");
     document.getElementById("lightbox-close").focus();
   });
   document.getElementById("lightbox-prev").addEventListener("click", () => tampil(idx - 1));
@@ -235,22 +237,8 @@ async function init() {
   initLightbox();
 }
 
-function initReveal() {
-  const els = document.querySelectorAll("[data-reveal]");
-  if (!els.length) return;
-  if (!("IntersectionObserver" in window)) {
-    els.forEach((el) => el.classList.add("revealed"));
-    return;
-  }
-  const io = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        entry.target.classList.add("revealed");
-        io.unobserve(entry.target);
-      }
-    },
-    { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
-  );
-  els.forEach((el) => io.observe(el));
-}
+initReveal();
+initMenu();
+watchSections();
+watchSketch();
+init();
