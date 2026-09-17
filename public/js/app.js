@@ -129,6 +129,36 @@ function initHeroTitle() {
   h1.innerHTML = [...text]
     .map((ch) => `<span class="type-char" aria-hidden="true">${ch}</span>`)
     .join("") + `<span class="caret" aria-hidden="true"></span>`;
+  const chars = h1.querySelectorAll(".type-char");
+  if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    chars.forEach((c) => c.classList.add("shown"));
+    return;
+  }
+  // Typewriter Loop Effect: ketik masuk, tahan, hapus, ulangi
+  const KETIK_MS = 115;
+  const TAHAN_MS = 3000;
+  const JEDA_MS = 800;
+  const tunggu = (ms) => new Promise((selesai) => setTimeout(selesai, ms));
+  (async () => {
+    await tunggu(500);
+    for (;;) {
+      // ketik masuk: irama natural, variasi kecil antar huruf
+      for (let i = 0; i < chars.length; i++) {
+        chars[i].classList.add("shown");
+        await tunggu(KETIK_MS + Math.random() * 55);
+      }
+      // tahan 3 detik sebelum menghapus
+      await tunggu(TAHAN_MS);
+      // ketik keluar: mulai pelan lalu makin cepat (smooth sweep)
+      let jedaHapus = 150;
+      for (let i = chars.length - 1; i >= 0; i--) {
+        chars[i].classList.remove("shown");
+        await tunggu(jedaHapus);
+        jedaHapus = Math.max(45, jedaHapus * 0.72);
+      }
+      await tunggu(JEDA_MS);
+    }
+  })();
 }
 
 function initMenu() {
