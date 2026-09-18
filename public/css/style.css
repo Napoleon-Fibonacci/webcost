@@ -226,7 +226,7 @@ html {
   display: block;
   position: fixed;
   inset: 0;
-  z-index: 55;
+  z-index: 19;
   background: rgba(14, 28, 46, 0.35);
   opacity: 0;
   animation: backdrop-in 0.22s ease forwards;
