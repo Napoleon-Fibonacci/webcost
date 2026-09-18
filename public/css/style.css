@@ -1828,3 +1828,123 @@ overflow-wrap: anywhere;
     animation: none;
   }
 }
+
+/* kesan & pesan v2: kelas, emosi svg, fade-in bertingkat */
+
+.kelas-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: end;
+  margin-top: 0.5rem;
+}
+
+.kelas-pilih {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.kelas-pilih select {
+  display: block;
+  margin-top: 0.3rem;
+  min-width: 130px;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  font: inherit;
+  font-weight: 400;
+}
+
+.kelas-pilih select:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.kelas-anon {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding-bottom: 0.55rem;
+  cursor: pointer;
+}
+
+.kelas-anon input {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--blue);
+}
+
+.kelas-tag {
+  display: inline-block;
+  margin-left: 0.4rem;
+  padding: 0.08rem 0.5rem;
+  border: 1px solid var(--conn);
+  color: var(--blue);
+  font-family: "Chakra Petch", system-ui, sans-serif;
+  font-size: 0.7rem;
+  vertical-align: middle;
+}
+
+.chip span svg {
+  width: 1.15em;
+  height: 1.15em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: -0.22em;
+  margin-right: 0.35em;
+}
+
+.chip span svg .dot {
+  fill: currentColor;
+  stroke: none;
+}
+
+.chip input:checked + span svg {
+  stroke: #fff;
+}
+
+.chip {
+  animation: pop-in 0.45s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.chip:nth-child(1) { animation-delay: 0.3s; }
+.chip:nth-child(2) { animation-delay: 0.36s; }
+.chip:nth-child(3) { animation-delay: 0.42s; }
+.chip:nth-child(4) { animation-delay: 0.48s; }
+.chip:nth-child(5) { animation-delay: 0.54s; }
+.chip:nth-child(6) { animation-delay: 0.6s; }
+.chip:nth-child(7) { animation-delay: 0.66s; }
+.chip:nth-child(8) { animation-delay: 0.72s; }
+
+.page-kesan .kesan-form > label,
+.page-kesan .kesan-form > .label-teks,
+.page-kesan .kesan-form > .kelas-row {
+  animation: fade-in-up 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.page-kesan .kesan-form > label:nth-of-type(1) { animation-delay: 0.34s; }
+.page-kesan .kesan-form > .label-teks { animation-delay: 0.4s; }
+.page-kesan .kesan-form > .kelas-row { animation-delay: 0.44s; }
+.page-kesan .kesan-form > label:nth-of-type(2) { animation-delay: 0.5s; }
+.page-kesan .kesan-form > label:nth-of-type(3) { animation-delay: 0.56s; }
+.page-kesan .kesan-form > .k-form-actions { animation: fade-in-up 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) 0.62s both; }
+
+.page-kesan .site-header { animation: fade-in 0.5s ease both; }
+.page-kesan .site-footer { animation: fade-in 0.6s ease 0.5s both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .chip,
+  .page-kesan .kesan-form > label,
+  .page-kesan .kesan-form > .label-teks,
+  .page-kesan .kesan-form > .kelas-row,
+  .page-kesan .kesan-form > .k-form-actions,
+  .page-kesan .site-header,
+  .page-kesan .site-footer {
+    animation: none;
+  }
+}

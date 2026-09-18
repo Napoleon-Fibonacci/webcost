@@ -134,9 +134,10 @@ async function muatKesan() {
       .map((k) => {
         const tgl = tanggalPanjang(k.created_at);
         const chip = k.kesan ? `<span class="chip-tag">${esc(k.kesan)}</span>` : "";
+        const kelas = k.kelas ? `<span class="kelas-tag">${esc(k.kelas)}</span>` : "";
         const pesan = k.pesan ? `<p class="p-pesan">“${esc(k.pesan)}”</p>` : "";
         const saran = k.saran ? `<p class="p-saran">Saran: ${esc(k.saran)}</p>` : "";
-        return `<div class="k-row"><div class="k-info"><h4>${esc(k.nama)}${chip}</h4>${
+        return `<div class="k-row"><div class="k-info"><h4>${esc(k.nama)}${chip}${kelas}</h4>${
           tgl ? `<p class="meta">${esc(tgl)}</p>` : ""
         }${pesan}${saran}</div><div class="k-actions"><button class="btn-mini danger" type="button" data-del="${esc(k.id)}" data-nama="${esc(k.nama)}">Hapus</button></div></div>`;
       })

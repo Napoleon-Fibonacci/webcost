@@ -37,15 +37,37 @@
 
   <form id="kps-form" class="kesan-form">
     <label>Nama
-      <input id="kps-nama" type="text" maxlength="60" required placeholder="Namamu (boleh nama panggilan)">
+      <input id="kps-nama" type="text" maxlength="60" placeholder="Namamu (kosongkan untuk anonim)">
     </label>
+
+    <span class="label-teks">Kelas</span>
+    <div class="kelas-row">
+      <label class="kelas-pilih">Tingkat
+        <select id="kps-tingkat">
+          <option value="">Pilih tingkat…</option>
+          <option value="X">X</option>
+          <option value="XI">XI</option>
+          <option value="XII">XII</option>
+        </select>
+      </label>
+      <label class="kelas-pilih">Nomor
+        <select id="kps-nomor" disabled>
+          <option value="">Pilih nomor…</option>
+        </select>
+      </label>
+      <label class="kelas-anon"><input type="checkbox" id="kps-tanpa-kelas"><span>Rahasiakan kelas</span></label>
+    </div>
 
     <span class="label-teks">Kesanmu</span>
     <div class="chip-row" role="radiogroup" aria-label="Pilih kesan">
-      <label class="chip"><input type="radio" name="kesan" value="Senang" checked><span>😊 Senang</span></label>
-      <label class="chip"><input type="radio" name="kesan" value="Terkesan"><span>🤩 Terkesan</span></label>
-      <label class="chip"><input type="radio" name="kesan" value="Terinspirasi"><span>💡 Terinspirasi</span></label>
-      <label class="chip"><input type="radio" name="kesan" value="Bangga"><span>🙌 Bangga</span></label>
+      <label class="chip"><input type="radio" name="kesan" value="Senang" checked><span data-emosi="senang"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.2c.9 1.2 2.1 1.8 3.5 1.8s2.6-.6 3.5-1.8"/><circle class="dot" cx="9" cy="10" r="0.5"/><circle class="dot" cx="15" cy="10" r="0.5"/></svg>Senang</span></label>
+      <label class="chip"><input type="radio" name="kesan" value="Terkesan"><span data-emosi="terkesan"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="13.8" r="2.6"/><circle class="dot" cx="9" cy="9.4" r="0.5"/><circle class="dot" cx="15" cy="9.4" r="0.5"/></svg>Terkesan</span></label>
+      <label class="chip"><input type="radio" name="kesan" value="Terinspirasi"><span data-emosi="terinspirasi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5a5.4 5.4 0 0 1 3.2 9.7c-.7.6-1.2 1.2-1.2 2v.6h-4v-.6c0-.8-.5-1.4-1.2-2A5.4 5.4 0 0 1 12 3.5Z"/><line x1="10.2" y1="18.6" x2="13.8" y2="18.6"/><line x1="10.9" y1="20.5" x2="13.1" y2="20.5"/></svg>Terinspirasi</span></label>
+      <label class="chip"><input type="radio" name="kesan" value="Bangga"><span data-emosi="bangga"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 13.2 7.8 11.5a1.6 1.6 0 0 0-2.3 2.3l3.6 3.6c.6.6 1.4.9 2.2.9h3.2c1.7 0 3-1.3 3-3v-3.6"/><path d="M9.5 13.2l2-2a1.6 1.6 0 0 1 2.3 2.3l-1.3 1.3"/><path d="M12.5 4.8l.9-2 .9 2 2 .9-2 .9-.9 2-.9-2-2-.9Z"/></svg>Bangga</span></label>
+      <label class="chip"><input type="radio" name="kesan" value="Kagum"><span data-emosi="kagum"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.5l2.2 4.6 5 .7-3.6 3.5.9 5-4.5-2.4-4.5 2.4.9-5L4.8 9.8l5-.7Z"/></svg>Kagum</span></label>
+      <label class="chip"><input type="radio" name="kesan" value="Semangat"><span data-emosi="semangat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 3.5 6 13h4.5L9.5 20.5 18 10.5h-4.8Z"/></svg>Semangat</span></label>
+      <label class="chip"><input type="radio" name="kesan" value="Betah"><span data-emosi="betah"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19.5s-6.5-4.1-6.5-8.6c0-2.1 1.6-3.7 3.6-3.7 1.2 0 2.3.6 2.9 1.6.6-1 1.7-1.6 2.9-1.6 2 0 3.6 1.6 3.6 3.7 0 4.5-6.5 8.6-6.5 8.6Z"/></svg>Betah</span></label>
+      <label class="chip"><input type="radio" name="kesan" value="Penasaran"><span data-emosi="penasaran"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.2 9.2a2.9 2.9 0 1 1 4.1 3c-.9.5-1.3 1-1.3 1.9v.5"/><circle class="dot" cx="12" cy="17.8" r="0.5"/><circle cx="12" cy="12" r="9"/></svg>Penasaran</span></label>
     </div>
 
     <label>Pesan untuk COST
