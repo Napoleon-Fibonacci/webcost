@@ -1667,3 +1667,36 @@ overflow-wrap: anywhere;
 .admin-out {
   margin-top: 2.5rem;
 }
+
+/* admin: fade-in masuk berjenjang */
+
+.page-admin .page-head,
+.page-admin #login,
+.page-admin #panel {
+  animation: fade-in-up 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.page-admin .page-head { animation-delay: 0.05s; }
+.page-admin #login { animation-delay: 0.12s; }
+.page-admin #panel { animation-delay: 0.1s; }
+
+.page-admin .admin-tabs { animation: fade-in-up 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) 0.18s both; }
+.page-admin .dropzone,
+.page-admin .k-form { animation: fade-in-up 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) 0.26s both; }
+.page-admin .admin-grid,
+.page-admin .k-list { animation: fade-in-up 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) 0.34s both; }
+.page-admin .admin-out { animation: fade-in-up 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) 0.42s both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .page-admin .page-head,
+  .page-admin #login,
+  .page-admin #panel,
+  .page-admin .admin-tabs,
+  .page-admin .dropzone,
+  .page-admin .k-form,
+  .page-admin .admin-grid,
+  .page-admin .k-list,
+  .page-admin .admin-out {
+    animation: none;
+  }
+}

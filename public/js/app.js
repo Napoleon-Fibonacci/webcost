@@ -46,14 +46,6 @@ function dateParts(value) {
   };
 }
 
-function tanggalPendek(value) {
-  if (!value) return "";
-  const d = new Date(value);
-  return Number.isNaN(d.getTime())
-    ? ""
-    : d.toLocaleDateString("id-ID", { day: "numeric", month: "short" });
-}
-
 function initLightbox() {
   const box = document.getElementById("galeri-grid");
   const lb = document.getElementById("lightbox");
@@ -67,10 +59,7 @@ function initLightbox() {
     img.src = galeriData[idx].url;
     img.alt = `Foto kegiatan COST ${idx + 1}`;
     if (caption) {
-      const tgl = tanggalPendek(galeriData[idx].tanggal);
-      caption.textContent = tgl
-        ? `Foto ${idx + 1} dari ${galeriData.length}, ${tgl}`
-        : `Foto ${idx + 1} dari ${galeriData.length}`;
+      caption.textContent = `Foto ${idx + 1} dari ${galeriData.length}`;
     }
   };
   const tutup = () => {
@@ -258,7 +247,6 @@ async function init() {
   const galeri = await rows("foto", "created_at", false, 12);
   galeriData = (galeri ?? []).map((f) => ({
     url: client.storage.from("gallery").getPublicUrl(f.path).data.publicUrl,
-    tanggal: f.created_at,
   }));
   const galeriBox = document.getElementById("galeri-grid");
   if (!galeri) showMessage(galeriBox, statusTanpaDb);
@@ -269,8 +257,7 @@ async function init() {
       (g, i) =>
         `<button class="galeri-item" type="button" data-idx="${i}" aria-label="Buka foto ${i + 1}">` +
         `<span class="g-frame"><img src="${esc(g.url)}" alt="" loading="lazy"></span>` +
-        `<span class="g-strip"><span class="g-num">${String(i + 1).padStart(2, "0")}</span>` +
-        `<span class="g-tgl">${esc(tanggalPendek(g.tanggal))}</span></span></button>`
+        `<span class="g-strip"><span class="g-num">${String(i + 1).padStart(2, "0")}</span></span></button>`
     )
     .join("");
   }
