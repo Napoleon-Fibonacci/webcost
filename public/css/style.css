@@ -1952,3 +1952,46 @@ overflow-wrap: anywhere;
     animation: none;
   }
 }
+
+/* tombol hero berpasangan + aksi kesan & pesan */
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: start;
+}
+
+.btn-biru {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--ink);
+  box-shadow: 3px 3px 0 var(--signal);
+}
+
+.btn-biru:hover {
+  background: #14458a;
+}
+
+.nav-kesan {
+  padding: 0.35rem 0.8rem;
+  background: var(--blue);
+  color: #fff !important;
+  font-weight: 700;
+  border-radius: 3px;
+}
+
+.nav-kesan:hover {
+  color: #fff !important;
+  background: #14458a;
+}
+
+.nav-kesan::after {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .btn-biru, .nav-kesan {
+    transition: background 0.18s ease;
+  }
+}
