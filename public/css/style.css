@@ -1920,6 +1920,10 @@ overflow-wrap: anywhere;
 .chip:nth-child(6) { animation-delay: 0.6s; }
 .chip:nth-child(7) { animation-delay: 0.66s; }
 .chip:nth-child(8) { animation-delay: 0.72s; }
+.chip:nth-child(9) { animation-delay: 0.78s; }
+.chip:nth-child(10) { animation-delay: 0.84s; }
+.chip:nth-child(11) { animation-delay: 0.9s; }
+.chip:nth-child(12) { animation-delay: 0.96s; }
 
 .page-kesan .kesan-form > label,
 .page-kesan .kesan-form > .label-teks,
