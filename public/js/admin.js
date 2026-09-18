@@ -34,13 +34,25 @@ let selectedPath = "";
 let kegiatanRows = [];
 let editingId = "";
 
+const PANEL_TAB = {
+  "tab-galeri": "isi-galeri",
+  "tab-kegiatan": "isi-kegiatan",
+  "tab-kesan": "isi-kesan",
+};
+
 document.querySelectorAll(".admin-tab").forEach((tab) => {
   tab.addEventListener("click", () => {
     document.querySelectorAll(".admin-tab").forEach((t) => {
       t.setAttribute("aria-selected", String(t === tab));
     });
-    $("isi-galeri").hidden = tab.id !== "tab-galeri";
-    $("isi-kegiatan").hidden = tab.id !== "tab-kegiatan";
+    for (const [tabId, panelId] of Object.entries(PANEL_TAB)) {
+      $(panelId).hidden = tabId !== tab.id;
+    }
+    if (tab.id === "tab-kesan") {
+      muatKesan().catch((e) => {
+        $("kesan-list").innerHTML = `<p class="error">${esc(e.message)}</p>`;
+      });
+    }
   });
 });
 
@@ -108,6 +120,29 @@ function renderKegiatan() {
 async function muatKegiatan() {
   kegiatanRows = await api("/api/kegiatan");
   renderKegiatan();
+}
+
+let kesanDimuat = false;
+
+async function muatKesan() {
+  const rows = await api("/api/kesan");
+  const box = $("kesan-list");
+  if (!rows.length) {
+    box.innerHTML = '<p class="muted">Belum ada pesan masuk.</p>';
+  } else {
+    box.innerHTML = rows
+      .map((k) => {
+        const tgl = tanggalPanjang(k.created_at);
+        const chip = k.kesan ? `<span class="chip-tag">${esc(k.kesan)}</span>` : "";
+        const pesan = k.pesan ? `<p class="p-pesan">“${esc(k.pesan)}”</p>` : "";
+        const saran = k.saran ? `<p class="p-saran">Saran: ${esc(k.saran)}</p>` : "";
+        return `<div class="k-row"><div class="k-info"><h4>${esc(k.nama)}${chip}</h4>${
+          tgl ? `<p class="meta">${esc(tgl)}</p>` : ""
+        }${pesan}${saran}</div><div class="k-actions"><button class="btn-mini danger" type="button" data-del="${esc(k.id)}" data-nama="${esc(k.nama)}">Hapus</button></div></div>`;
+      })
+      .join("");
+  }
+  kesanDimuat = true;
 }
 
 function mulaiEdit(id) {
@@ -290,9 +325,15 @@ $("login-form").addEventListener("submit", async (e) => {
       body: JSON.stringify({ password: $("password").value }),
     });
     showApp(true);
-    await Promise.all([refreshGrid(), muatKegiatan().catch((err) => {
-      $("k-list").innerHTML = `<p class="error">${esc(err.message)}</p>`;
-    })]);
+    await Promise.all([
+      refreshGrid(),
+      muatKegiatan().catch((err) => {
+        $("k-list").innerHTML = `<p class="error">${esc(err.message)}</p>`;
+      }),
+      muatKesan().catch(() => {
+        $("kesan-list").innerHTML = '<p class="muted">Belum bisa memuat pesan.</p>';
+      }),
+    ]);
   } catch (e) {
     $("login-msg").textContent = e.message;
   }
@@ -331,10 +372,26 @@ $("admin-grid").addEventListener("click", (e) => {
   if (btn) hapus(btn.dataset.path);
 });
 
+$("kesan-list").addEventListener("click", async (e) => {
+  const btn = e.target.closest("button[data-del]");
+  if (!btn) return;
+  if (!window.confirm(`Hapus pesan dari "${btn.dataset.nama}"?`)) return;
+  try {
+    await api("/api/kesan", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: Number(btn.dataset.del) }),
+    });
+    await muatKesan();
+  } catch (err) {
+    $("kesan-status").textContent = err.message;
+  }
+});
+
 api("/api/list")
   .then(async () => {
     showApp(true);
-    await Promise.all([refreshGrid(), muatKegiatan().catch(() => {})]);
+    await Promise.all([refreshGrid(), muatKegiatan().catch(() => {}), muatKesan().catch(() => {})]);
   })
   .catch((e) => {
     showApp(false);

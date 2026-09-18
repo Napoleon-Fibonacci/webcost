@@ -52,6 +52,14 @@ Teks beranda diedit lewat Supabase Dashboard; kegiatan dan foto lewat panel admi
 4. Tab **Kegiatan**: isi judul, tanggal, deskripsi, lalu pilih foto dari galeri yang sudah diunggah (atau Tanpa foto). **Simpan Kegiatan** menambah entri baru; setiap baris punya **Ubah** (memuat ulang data ke formulir) dan **Hapus**.
 5. Semua perubahan langsung tampil di halaman utama, tanpa deploy ulang.
 
+## Halaman Kesan & Pesan
+
+Pengunjung menulis kesan, pesan, dan saran di halaman `/kesan&pesan`. Semua pesan masuk ke tabel `kesan_pesan` dan dibaca pengurus di tab **Kesan & Pesan** di panel admin (bisa dihapus di sana).
+
+1. Jalankan sekali isi `supabase/kesan-pesan.sql` di Supabase SQL Editor (membuat tabel + kebijakan RLS: publik hanya boleh mengirim).
+2. Halaman publik: `https://domain-anda.vercel.app/kesan&pesan`. Boleh dibagikan atau ditautkan dari bio media sosial.
+3. Tidak ada konfigurasi tambahan; memakai environment variable yang sama dengan fitur lain.
+
 ## Menjalankan di komputer lokal
 
 ```bash

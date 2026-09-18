@@ -46,6 +46,7 @@
       <div class="admin-tabs" role="tablist" aria-label="Bagian panel">
         <button class="admin-tab" id="tab-galeri" type="button" role="tab" aria-selected="true" aria-controls="isi-galeri">Foto Galeri</button>
         <button class="admin-tab" id="tab-kegiatan" type="button" role="tab" aria-selected="false" aria-controls="isi-kegiatan">Kegiatan</button>
+        <button class="admin-tab" id="tab-kesan" type="button" role="tab" aria-selected="false" aria-controls="isi-kesan">Kesan &amp; Pesan</button>
       </div>
 
       <div id="isi-galeri" role="tabpanel" aria-labelledby="tab-galeri">
@@ -79,6 +80,12 @@
         </form>
         <h3 class="k-list-head">Daftar kegiatan</h3>
         <div id="k-list" class="k-list"></div>
+      </div>
+
+      <div id="isi-kesan" role="tabpanel" aria-labelledby="tab-kesan" hidden>
+        <p class="tab-intro">Pesan masuk dari halaman <strong>/kesan&amp;pesan</strong>. Hapus pesan yang sudah dibaca atau tidak pantas.</p>
+        <div id="kesan-list" class="k-list"></div>
+        <p id="kesan-status" class="muted" aria-live="polite"></p>
       </div>
 
       <p class="admin-out"><button class="btn ghost" type="button" id="logout">Keluar</button></p>

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kesan &amp; Pesan — COST</title>
+  <meta name="description" content="Tinggalkan kesan &amp; pesan (plus saran) untuk ekstrakurikuler COST.">
+  <meta name="theme-color" content="#f0f3f8">
+  <link rel="icon" type="image/jpeg" href="https://cdn.jsdelivr.net/gh/Napoleon-Fibonacci/webcost@main/assets/logo-cost.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Chakra+Petch:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#form-kps">Langsung ke formulir</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-name">COST</span>
+      <span class="brand-tag">Kesan &amp; Pesan</span>
+    </a>
+    <nav class="site-nav" aria-label="Navigasi utama">
+      <a href="index.html">Kembali ke Situs</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container page-kesan">
+  <div class="page-head">
+    <h1>Kesan &amp; Pesan</h1>
+  </div>
+  <p class="kesan-intro">Pernah ikut kegiatan COST atau mampir ke website ini? Tulis kesanmu, pesan untuk kami, dan saran supaya COST jadi lebih baik lagi. Semua pesan dibaca langsung oleh pengurus.</p>
+
+  <p id="kps-offline" class="muted" hidden>Formulir belum terhubung ke basis data. Setel environment variable Supabase di Vercel, lalu deploy ulang.</p>
+
+  <form id="kps-form" class="kesan-form">
+    <label>Nama
+      <input id="kps-nama" type="text" maxlength="60" required placeholder="Namamu (boleh nama panggilan)">
+    </label>
+
+    <span class="label-teks">Kesanmu</span>
+    <div class="chip-row" role="radiogroup" aria-label="Pilih kesan">
+      <label class="chip"><input type="radio" name="kesan" value="Senang" checked><span>😊 Senang</span></label>
+      <label class="chip"><input type="radio" name="kesan" value="Terkesan"><span>🤩 Terkesan</span></label>
+      <label class="chip"><input type="radio" name="kesan" value="Terinspirasi"><span>💡 Terinspirasi</span></label>
+      <label class="chip"><input type="radio" name="kesan" value="Bangga"><span>🙌 Bangga</span></label>
+    </div>
+
+    <label>Pesan untuk COST
+      <textarea id="kps-pesan" rows="4" maxlength="500" required placeholder="Tulis pesanmu di sini…"></textarea>
+    </label>
+
+    <label>Saran (opsional)
+      <textarea id="kps-saran" rows="3" maxlength="500" placeholder="Ide atau saran supaya COST makin baik…"></textarea>
+    </label>
+
+    <div class="k-form-actions">
+      <button class="btn" type="submit" id="kps-kirim">Kirim</button>
+      <p id="kps-status" class="muted" aria-live="polite"></p>
+    </div>
+  </form>
+
+  <section id="kps-sukses" class="sukses-panel" hidden>
+    <h2>Terima kasih! 🎉</h2>
+    <p>Pesanmu sudah masuk dan akan dibaca oleh pengurus COST.</p>
+    <button class="btn ghost" type="button" id="kps-lagi">Kirim pesan lagi</button>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <p>&copy; 2026 COST</p>
+    <p class="inline-links"><a href="index.html">Beranda</a></p>
+  </div>
+</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/kesan.js"></script>
+</body>
+</html>

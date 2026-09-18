@@ -1700,3 +1700,131 @@ overflow-wrap: anywhere;
     animation: none;
   }
 }
+
+/* kesan, pesan & saran */
+
+.tab-intro {
+  margin-top: 1.5rem;
+  color: var(--ink-soft);
+}
+
+.chip-tag {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.08rem 0.5rem;
+  border: 1px solid var(--rule);
+  background: var(--band);
+  font-family: "Chakra Petch", system-ui, sans-serif;
+  font-size: 0.7rem;
+  vertical-align: middle;
+}
+
+.p-pesan {
+  margin-top: 0.45rem;
+}
+
+.p-saran {
+  margin-top: 0.35rem;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.page-kesan {
+  max-width: 720px;
+  padding-bottom: 3.5rem;
+}
+
+.page-kesan .page-head {
+  animation: fade-in-up 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.kesan-intro {
+  animation: fade-in-up 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) 0.1s both;
+}
+
+.kesan-form {
+  margin-top: 1.75rem;
+  border: 1px solid var(--rule);
+  background: var(--card);
+  padding: 1.25rem clamp(1rem, 3vw, 1.75rem) 1.5rem;
+  animation: fade-in-up 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) 0.2s both;
+}
+
+.kesan-form label {
+  display: block;
+  margin-top: 1.1rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.kesan-form input[type="text"],
+.kesan-form textarea {
+  display: block;
+  width: 100%;
+  margin-top: 0.35rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  font: inherit;
+  font-weight: 400;
+}
+
+.kesan-form textarea {
+  resize: vertical;
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.chip {
+  position: relative;
+}
+
+.chip input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.chip span {
+  display: inline-block;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--rule);
+  background: var(--paper);
+  font-family: "Chakra Petch", system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.chip input:checked + span {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+
+.chip input:focus-visible + span {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}
+
+.sukses-panel {
+  margin-top: 1.75rem;
+  border: 1px solid var(--rule);
+  background: var(--card);
+  padding: 1.5rem clamp(1rem, 3vw, 1.75rem);
+  animation: fade-in-up 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-kesan .page-head,
+  .kesan-intro,
+  .kesan-form,
+  .sukses-panel {
+    animation: none;
+  }
+}
