@@ -153,18 +153,39 @@ function initHeroTitle() {
 function initMenu() {
   const toggle = document.getElementById("nav-toggle");
   const nav = document.getElementById("site-nav");
+  const backdrop = document.getElementById("nav-backdrop");
   if (!toggle || !nav) return;
+  const tutup = () => {
+    toggle.setAttribute("aria-expanded", "false");
+    nav.classList.remove("open");
+    document.body.classList.remove("menu-open");
+    if (backdrop) {
+      backdrop.classList.remove("show");
+      setTimeout(() => { backdrop.hidden = true; }, 220);
+    }
+  };
+  const buka = () => {
+    toggle.setAttribute("aria-expanded", "true");
+    nav.classList.add("open");
+    document.body.classList.add("menu-open");
+    if (backdrop) {
+      backdrop.hidden = false;
+      requestAnimationFrame(() => backdrop.classList.add("show"));
+    }
+  };
   toggle.addEventListener("click", () => {
     const open = toggle.getAttribute("aria-expanded") === "true";
-    toggle.setAttribute("aria-expanded", String(!open));
-    nav.classList.toggle("open", !open);
+    if (open) tutup();
+    else buka();
   });
-  nav.querySelectorAll("a").forEach((a) =>
-    a.addEventListener("click", () => {
-      toggle.setAttribute("aria-expanded", "false");
-      nav.classList.remove("open");
-    })
-  );
+  if (backdrop) backdrop.addEventListener("click", tutup);
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && nav.classList.contains("open")) {
+      tutup();
+      toggle.focus();
+    }
+  });
+  nav.querySelectorAll("a").forEach((a) => a.addEventListener("click", tutup));
 }
 
 function watchSections() {
