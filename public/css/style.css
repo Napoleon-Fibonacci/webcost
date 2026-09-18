@@ -1995,3 +1995,15 @@ overflow-wrap: anywhere;
     transition: background 0.18s ease;
   }
 }
+
+.btn-outline {
+  background: var(--card);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  box-shadow: 3px 3px 0 var(--conn);
+}
+
+.btn-outline:hover {
+  background: var(--band);
+  box-shadow: 3px 3px 0 var(--blue);
+}

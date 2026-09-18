@@ -8,6 +8,7 @@
   "redirects": [
     { "source": "/admin.html", "destination": "/admin", "statusCode": 308 },
     { "source": "/kesan", "destination": "/kesan&pesan", "statusCode": 308 },
-    { "source": "/kesan.html", "destination": "/kesan&pesan", "statusCode": 308 }
+    { "source": "/kesan.html", "destination": "/kesan&pesan", "statusCode": 308 },
+    { "source": "/index.html", "destination": "/", "statusCode": 308 }
   ]
 }
