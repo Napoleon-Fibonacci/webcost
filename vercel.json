@@ -1,4 +1,10 @@
 {
   "buildCommand": "npm run build",
-  "outputDirectory": "public"
+  "outputDirectory": "public",
+  "rewrites": [
+    { "source": "/admin", "destination": "/admin.html" }
+  ],
+  "redirects": [
+    { "source": "/admin.html", "destination": "/admin", "statusCode": 308 }
+  ]
 }
